@@ -1,7 +1,10 @@
-use storefront::store_model;
+use storefront::store_controller::StoreController;
+use storefront::store_model::StoreModel;
 
 fn main() {
-    let mut store_model: store_model::StoreModel = store_model::new_store_model();
+    let mut store_model: StoreModel = StoreModel::new();
+    let store_controller: StoreController = StoreController::new();
+
     store_model.add_product(
         String::from("Test Product"),
         123.45,
@@ -30,7 +33,7 @@ fn main() {
         None => println!("That isn't an item!"),
         Some(p) => {
             let (product, quantity) = p;
-            println!("{}", product.name());
+            println!("{}: {}", product.name(), quantity);
         }
     }
 

@@ -1,16 +1,17 @@
-use crate::database;
-use crate::product;
+use crate::database::Database;
+use crate::product::Product;
 
 pub struct StoreModel {
-    db: database::Database,
-}
-
-pub fn new_store_model() -> StoreModel {
-    let db: database::Database = database::new_database();
-    StoreModel { db }
+    db: Database,
 }
 
 impl StoreModel {
+    pub fn new() -> Self {
+        Self {
+            db: Database::new(),
+        }
+    }
+
     pub fn add_product(
         &mut self,
         name: String,
@@ -23,7 +24,11 @@ impl StoreModel {
             .add_product(name, price, short_desc, long_desc, quantity);
     }
 
-    pub fn product(&self, index: u32) -> Option<&(product::Product, u32)> {
+    pub fn product(&self, index: u32) -> Option<&(Product, u32)> {
         self.db.product(index)
+    }
+
+    pub fn products(&self) -> &Vec<(Product, u32)> {
+        &self.db.products()
     }
 }
