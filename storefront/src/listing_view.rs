@@ -8,7 +8,7 @@ impl ListingView {
     }
 
     // Update the view to show the listings.
-    pub fn update_listing_view(&self, listings: Vec<ProductListing>) {
+    pub fn update(&self, listings: Vec<ProductListing>) {
         // Clear the screen for this view.
         print!("{}[2J{}[H", 27 as char, 27 as char);
 

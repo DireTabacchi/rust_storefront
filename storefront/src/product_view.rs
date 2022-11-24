@@ -6,7 +6,7 @@ impl ProductView {
     }
 
     // Update the view to show the product.
-    pub fn update_product_view(
+    pub fn update(
         &self,
         name: String,
         price: f32,

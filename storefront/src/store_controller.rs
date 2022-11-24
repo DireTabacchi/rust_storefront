@@ -60,7 +60,31 @@ impl StoreController {
             println!("{}", products.get(0).unwrap().0.name());
         }
 
-        self.listing_view.update_listing_view(listings);
+        self.listing_view.update(listings);
+    }
+
+    pub fn update_product_view(&self, user_choice: u32) -> (bool, ViewType) {
+        let product = self.store_model.product(user_choice - 1);
+        match product {
+            // If there was a product, request the product
+            // view to update with this product.
+            Some(p) => {
+                self.product_view.update(
+                    String::from(p.0.name()),
+                    *p.0.price(),
+                    String::from(p.0.long_desc()),
+                    String::from(p.0.short_desc()),
+                    p.1,
+                );
+                (true, ViewType::ProductView)
+            }
+            // If there was no product, or the user entered
+            // an invalid command, inform the user.
+            None => {
+                self.product_view.invalid_choice();
+                (true, ViewType::ListingView)
+            }
+        }
     }
 
     // Handle input from the user.
@@ -106,27 +130,7 @@ impl StoreController {
                     }
 
                     // Get the product from the store model.
-                    let product = self.store_model.product(choice - 1);
-                    match product {
-                        // If there was a product, request the product
-                        // view to update with this product.
-                        Some(p) => {
-                            self.product_view.update_product_view(
-                                String::from(p.0.name()),
-                                *p.0.price(),
-                                String::from(p.0.short_desc()),
-                                String::from(p.0.long_desc()),
-                                p.1,
-                            );
-                            (true, ViewType::ProductView)
-                        }
-                        // If there was no product, or the user entered
-                        // an invalid command, inform the user.
-                        None => {
-                            self.product_view.invalid_choice();
-                            (true, ViewType::ListingView)
-                        }
-                    }
+                    self.update_product_view(choice)
                 }
             }
             // If the current view is the product view
